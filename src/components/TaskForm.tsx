@@ -80,6 +80,8 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, isEdit = false }) => {
         userPriority: values.userPriority as TaskPriority,
         dueDate: values.dueDate,
         userId: user?.id || "", // Add the userId from the auth context
+        status: "todo", // Add default status
+        needsHelp: false // Add default needsHelp value
       });
     }
     navigate("/");
