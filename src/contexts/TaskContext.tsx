@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import { toast } from "sonner";
@@ -31,6 +30,8 @@ export interface Task {
   completedAt?: string;
   attachments: Attachment[];
   isCompleted: boolean;
+  status: "todo" | "in_progress" | "done";
+  needsHelp: boolean;
 }
 
 // State interface
@@ -84,6 +85,8 @@ const mockTasks: Task[] = [
       },
     ],
     isCompleted: false,
+    status: "todo",
+    needsHelp: false
   },
   {
     id: "2",
@@ -96,6 +99,8 @@ const mockTasks: Task[] = [
     createdAt: yesterday,
     attachments: [],
     isCompleted: false,
+    status: "todo",
+    needsHelp: false
   },
   {
     id: "3",
@@ -116,6 +121,8 @@ const mockTasks: Task[] = [
       },
     ],
     isCompleted: false,
+    status: "todo",
+    needsHelp: false
   },
   {
     id: "4",
@@ -128,6 +135,8 @@ const mockTasks: Task[] = [
     createdAt: today,
     attachments: [],
     isCompleted: false,
+    status: "todo",
+    needsHelp: false
   },
   {
     id: "5",
@@ -147,6 +156,8 @@ const mockTasks: Task[] = [
       },
     ],
     isCompleted: false,
+    status: "todo",
+    needsHelp: false
   },
 ];
 
@@ -327,6 +338,8 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
       createdAt: new Date().toISOString(),
       isCompleted: false,
       attachments: [],
+      status: "todo",
+      needsHelp: false
     };
     
     dispatch({ type: "ADD_TASK", payload: newTask });
