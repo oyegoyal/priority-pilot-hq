@@ -57,7 +57,7 @@ const AppSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild active={location.pathname === "/"}>
+                <SidebarMenuButton asChild isActive={location.pathname === "/"}>
                   <Link to="/" className="flex items-center space-x-3">
                     <ListTodo className="h-5 w-5" />
                     <span>My Tasks</span>
@@ -66,7 +66,7 @@ const AppSidebar = () => {
               </SidebarMenuItem>
               
               <SidebarMenuItem>
-                <SidebarMenuButton asChild active={location.pathname === "/completed"}>
+                <SidebarMenuButton asChild isActive={location.pathname === "/completed"}>
                   <Link to="/completed" className="flex items-center space-x-3">
                     <CheckSquare className="h-5 w-5" />
                     <span>Completed</span>
@@ -75,7 +75,7 @@ const AppSidebar = () => {
               </SidebarMenuItem>
               
               <SidebarMenuItem>
-                <SidebarMenuButton asChild active={location.pathname === "/calendar"}>
+                <SidebarMenuButton asChild isActive={location.pathname === "/calendar"}>
                   <Link to="/calendar" className="flex items-center space-x-3">
                     <Calendar className="h-5 w-5" />
                     <span>Calendar</span>
@@ -85,7 +85,7 @@ const AppSidebar = () => {
               
               {isManager() && (
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild active={location.pathname === "/team"}>
+                  <SidebarMenuButton asChild isActive={location.pathname === "/team"}>
                     <Link to="/team" className="flex items-center space-x-3">
                       <Users className="h-5 w-5" />
                       <span>Team View</span>
@@ -96,7 +96,7 @@ const AppSidebar = () => {
               
               {isManager() && (
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild active={location.pathname === "/reports"}>
+                  <SidebarMenuButton asChild isActive={location.pathname === "/reports"}>
                     <Link to="/reports" className="flex items-center space-x-3">
                       <BarChart className="h-5 w-5" />
                       <span>Reports</span>
@@ -113,7 +113,7 @@ const AppSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild active={location.pathname === "/settings"}>
+                <SidebarMenuButton asChild isActive={location.pathname === "/settings"}>
                   <Link to="/settings" className="flex items-center space-x-3">
                     <Settings className="h-5 w-5" />
                     <span>Settings</span>

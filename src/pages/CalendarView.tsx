@@ -46,13 +46,14 @@ const CalendarView: React.FC = () => {
     }
   };
 
-  // Custom day component to show dot for days with tasks
-  const dayWithTasks = (day: Date, selectedDate: Date) => {
-    const dateStr = day.toISOString().split("T")[0];
+  // Custom day rendering component
+  const customDayComponent = (props: any, selectedDate: Date) => {
+    const currentDate = props.date;
+    const dateStr = currentDate.toISOString().split("T")[0];
     const hasTasks = tasksByDate[dateStr] && tasksByDate[dateStr].length > 0;
-    const isSelected = day.toDateString() === selectedDate?.toDateString();
+    const isSelected = currentDate.toDateString() === selectedDate?.toDateString();
     const isToday =
-      day.toDateString() === new Date().toDateString() && !isSelected;
+      currentDate.toDateString() === new Date().toDateString() && !isSelected;
 
     return (
       <div className="relative">
@@ -63,7 +64,7 @@ const CalendarView: React.FC = () => {
             isToday && "border border-primary"
           )}
         >
-          <time dateTime={dateStr}>{day.getDate()}</time>
+          <time dateTime={dateStr}>{currentDate.getDate()}</time>
         </div>
         {hasTasks && (
           <div className="absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-primary"></div>
@@ -83,10 +84,9 @@ const CalendarView: React.FC = () => {
               mode="single"
               selected={date}
               onSelect={setDate}
-              className="rounded-md border"
+              className="rounded-md border pointer-events-auto"
               components={{
-                Day: ({ day, ...props }) =>
-                  dayWithTasks(day, date || new Date()),
+                Day: (props) => customDayComponent(props, date || new Date()),
               }}
             />
           </CardContent>

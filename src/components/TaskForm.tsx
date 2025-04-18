@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { Task, TaskPriority, useTask } from "@/contexts/TaskContext";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Define the form schema
 const taskSchema = z.object({
@@ -46,6 +47,7 @@ interface TaskFormProps {
 
 const TaskForm: React.FC<TaskFormProps> = ({ task, isEdit = false }) => {
   const { addTask, updateTask } = useTask();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   // Get today's date in YYYY-MM-DD format for the date input
@@ -71,12 +73,13 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, isEdit = false }) => {
         ...values,
       });
     } else {
-      // Add new task
+      // Add new task with userId included
       addTask({
         title: values.title,
         description: values.description,
         userPriority: values.userPriority as TaskPriority,
         dueDate: values.dueDate,
+        userId: user?.id || "", // Add the userId from the auth context
       });
     }
     navigate("/");
