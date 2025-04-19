@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -24,7 +23,6 @@ import {
   CheckSquare, 
   ListTodo, 
   Users, 
-  Calendar, 
   BarChart, 
   Settings, 
   LogOut,
@@ -33,7 +31,7 @@ import {
   Moon,
   AlertTriangle,
   X,
-  CalendarIcon
+  Calendar as CalendarIcon
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -141,7 +139,7 @@ const AppSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={location.pathname === "/calendar"}>
                   <Link to="/calendar" className="flex items-center space-x-3">
-                    <Calendar className="h-5 w-5" />
+                    <CalendarIcon className="h-5 w-5" />
                     <span>Calendar</span>
                   </Link>
                 </SidebarMenuButton>
@@ -242,11 +240,10 @@ const AppSidebar = () => {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, isManager } = useAuth();
-  const { getAllUserTasks } = useTask();
+  const { getAllUserTasks, updateTask } = useTask();
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  // Effect to open dialog when clicking on task
   useEffect(() => {
     const handleTaskClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
