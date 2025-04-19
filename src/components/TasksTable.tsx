@@ -34,6 +34,7 @@ interface TasksTableProps {
 const TasksTable: React.FC<TasksTableProps> = ({ tasks, editable = false }) => {
   const { updateTask } = useTask();
   const [editingTask, setEditingTask] = useState<string | null>(null);
+  const [editingCell, setEditingCell] = useState<{taskId: string, field: string} | null>(null);
   const [editedValues, setEditedValues] = useState<Partial<Task>>({});
 
   const handleAskHelp = (taskId: string, currentNeedsHelp: boolean) => {
@@ -54,8 +55,22 @@ const TasksTable: React.FC<TasksTableProps> = ({ tasks, editable = false }) => {
     });
   };
 
+  const startCellEditing = (taskId: string, field: string, task: Task) => {
+    if (!editable) return;
+    
+    setEditingCell({taskId, field});
+    setEditedValues({
+      title: task.title,
+      description: task.description,
+      userPriority: task.userPriority,
+      dueDate: task.dueDate,
+      status: task.status || "todo"
+    });
+  };
+
   const cancelEditing = () => {
     setEditingTask(null);
+    setEditingCell(null);
     setEditedValues({});
   };
 
@@ -64,6 +79,7 @@ const TasksTable: React.FC<TasksTableProps> = ({ tasks, editable = false }) => {
     if (task && editedValues) {
       updateTask({ ...task, ...editedValues });
       setEditingTask(null);
+      setEditingCell(null);
       setEditedValues({});
     }
   };
@@ -118,12 +134,21 @@ const TasksTable: React.FC<TasksTableProps> = ({ tasks, editable = false }) => {
         <TableBody>
           {tasks.map((task) => (
             <TableRow key={task.id}>
-              <TableCell className="font-medium">
-                {editingTask === task.id ? (
+              <TableCell 
+                className={cn("font-medium", editable && "cursor-pointer hover:bg-gray-50")} 
+                onClick={() => startCellEditing(task.id, 'title', task)}
+              >
+                {(editingTask === task.id || (editingCell?.taskId === task.id && editingCell?.field === 'title')) ? (
                   <Input 
                     value={editedValues.title || ''} 
                     onChange={(e) => handleInputChange('title', e.target.value)} 
                     className="w-full"
+                    autoFocus
+                    onBlur={() => saveEditing(task.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') saveEditing(task.id);
+                      if (e.key === 'Escape') cancelEditing();
+                    }}
                   />
                 ) : (
                   <Link to={`/task/${task.id}`} className="hover:underline">
@@ -131,22 +156,38 @@ const TasksTable: React.FC<TasksTableProps> = ({ tasks, editable = false }) => {
                   </Link>
                 )}
               </TableCell>
-              <TableCell className="max-w-xs">
-                {editingTask === task.id ? (
+              <TableCell 
+                className={cn("max-w-xs", editable && "cursor-pointer hover:bg-gray-50")}
+                onClick={() => startCellEditing(task.id, 'description', task)}
+              >
+                {(editingTask === task.id || (editingCell?.taskId === task.id && editingCell?.field === 'description')) ? (
                   <Input 
                     value={editedValues.description || ''} 
                     onChange={(e) => handleInputChange('description', e.target.value)} 
                     className="w-full"
+                    autoFocus
+                    onBlur={() => saveEditing(task.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') saveEditing(task.id);
+                      if (e.key === 'Escape') cancelEditing();
+                    }}
                   />
                 ) : (
                   <p className="truncate">{task.description}</p>
                 )}
               </TableCell>
-              <TableCell>
-                {editingTask === task.id ? (
+              <TableCell 
+                className={editable ? "cursor-pointer hover:bg-gray-50" : ""}
+                onClick={() => startCellEditing(task.id, 'userPriority', task)}
+              >
+                {(editingTask === task.id || (editingCell?.taskId === task.id && editingCell?.field === 'userPriority')) ? (
                   <Select 
                     value={editedValues.userPriority || task.userPriority} 
-                    onValueChange={(value) => handleInputChange('userPriority', value as TaskPriority)}
+                    onValueChange={(value) => {
+                      handleInputChange('userPriority', value as TaskPriority);
+                      setTimeout(() => saveEditing(task.id), 100);
+                    }}
+                    open={editingCell?.field === 'userPriority' && editingCell?.taskId === task.id}
                   >
                     <SelectTrigger className="w-[100px]">
                       <SelectValue />
@@ -168,9 +209,18 @@ const TasksTable: React.FC<TasksTableProps> = ({ tasks, editable = false }) => {
               <TableCell>
                 {new Date(task.createdAt).toLocaleDateString()}
               </TableCell>
-              <TableCell>
-                {editingTask === task.id ? (
-                  <Popover>
+              <TableCell 
+                className={editable ? "cursor-pointer hover:bg-gray-50" : ""}
+                onClick={() => startCellEditing(task.id, 'dueDate', task)}
+              >
+                {(editingTask === task.id || (editingCell?.taskId === task.id && editingCell?.field === 'dueDate')) ? (
+                  <Popover
+                    open={editingCell?.field === 'dueDate' && editingCell?.taskId === task.id}
+                    onOpenChange={() => {
+                      if (!editingCell) return;
+                      saveEditing(task.id);
+                    }}
+                  >
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -184,7 +234,10 @@ const TasksTable: React.FC<TasksTableProps> = ({ tasks, editable = false }) => {
                       <Calendar
                         mode="single"
                         selected={editedValues.dueDate ? new Date(editedValues.dueDate) : undefined}
-                        onSelect={(date) => handleInputChange('dueDate', date ? date.toISOString().split('T')[0] : '')}
+                        onSelect={(date) => {
+                          handleInputChange('dueDate', date ? date.toISOString().split('T')[0] : '');
+                          setTimeout(() => saveEditing(task.id), 100);
+                        }}
                         initialFocus
                         className={cn("p-3 pointer-events-auto")}
                       />
@@ -194,11 +247,18 @@ const TasksTable: React.FC<TasksTableProps> = ({ tasks, editable = false }) => {
                   new Date(task.dueDate).toLocaleDateString()
                 )}
               </TableCell>
-              <TableCell>
-                {editingTask === task.id ? (
+              <TableCell 
+                className={editable ? "cursor-pointer hover:bg-gray-50" : ""}
+                onClick={() => startCellEditing(task.id, 'status', task)}
+              >
+                {(editingTask === task.id || (editingCell?.taskId === task.id && editingCell?.field === 'status')) ? (
                   <Select 
                     value={editedValues.status || task.status || "todo"} 
-                    onValueChange={(value) => handleInputChange('status', value)}
+                    onValueChange={(value) => {
+                      handleInputChange('status', value);
+                      setTimeout(() => saveEditing(task.id), 100);
+                    }}
+                    open={editingCell?.field === 'status' && editingCell?.taskId === task.id}
                   >
                     <SelectTrigger className="w-[120px]">
                       <SelectValue />
