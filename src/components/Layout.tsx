@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -26,6 +27,8 @@ import {
   Settings, 
   LogOut,
   PlusCircle,
+  Moon,
+  Sun
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import HelpRequiredSidebar from "@/components/HelpRequiredSidebar";
