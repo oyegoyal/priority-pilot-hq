@@ -1,0 +1,66 @@
+
+:root {
+  --priority-low-bg: #e6f7ff;
+  --priority-low-text: #0066cc;
+  --priority-medium-bg: #fff7e6;
+  --priority-medium-text: #d46b08;
+  --priority-high-bg: #fff1f0;
+  --priority-high-text: #cf1322;
+  --priority-urgent-bg: #f5222d;
+  --priority-urgent-text: white;
+}
+
+.dark {
+  --priority-low-bg: rgba(24, 144, 255, 0.2);
+  --priority-low-text: #69c0ff;
+  --priority-medium-bg: rgba(250, 173, 20, 0.2);
+  --priority-medium-text: #ffc53d;
+  --priority-high-bg: rgba(245, 34, 45, 0.2);
+  --priority-high-text: #ff7875;
+  --priority-urgent-bg: #ff4d4f;
+  --priority-urgent-text: white;
+}
+
+.task-priority-low {
+  background-color: var(--priority-low-bg);
+  color: var(--priority-low-text);
+}
+
+.task-priority-medium {
+  background-color: var(--priority-medium-bg);
+  color: var(--priority-medium-text);
+}
+
+.task-priority-high {
+  background-color: var(--priority-high-bg);
+  color: var(--priority-high-text);
+}
+
+.task-priority-urgent {
+  background-color: var(--priority-urgent-bg);
+  color: var(--priority-urgent-text);
+  font-weight: 500;
+}
+
+/* Add animation for task cards */
+.task-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Interactive table styles */
+.interactive-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.interactive-table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.dark .interactive-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
