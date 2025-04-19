@@ -35,6 +35,11 @@
 
     --radius: 0.5rem;
 
+    --task-low: 142 76% 36%;
+    --task-medium: 35 92% 50%;
+    --task-high: 0 84% 60%;
+    --task-urgent: 0 74% 54%;
+
     --sidebar-background: 222 47% 15%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 210 80% 56%;
@@ -73,6 +78,11 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    --task-low: 142 76% 45%;
+    --task-medium: 35 92% 65%;
+    --task-high: 0 84% 70%;
+    --task-urgent: 0 74% 64%;
     
     --sidebar-background: 222 47% 10%;
     --sidebar-foreground: 210 40% 98%;
@@ -91,24 +101,39 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-150;
   }
 }
 
 @layer components {
   .task-priority-low {
-    @apply bg-task-low/10 text-task-low border-task-low/20;
+    @apply bg-[hsl(var(--task-low)_/_0.1)] text-[hsl(var(--task-low))] border-[hsl(var(--task-low)_/_0.2)];
   }
   
   .task-priority-medium {
-    @apply bg-task-medium/10 text-task-medium border-task-medium/20;
+    @apply bg-[hsl(var(--task-medium)_/_0.1)] text-[hsl(var(--task-medium))] border-[hsl(var(--task-medium)_/_0.2)];
   }
   
   .task-priority-high {
-    @apply bg-task-high/10 text-task-high border-task-high/20;
+    @apply bg-[hsl(var(--task-high)_/_0.1)] text-[hsl(var(--task-high))] border-[hsl(var(--task-high)_/_0.2)];
   }
   
   .task-priority-urgent {
-    @apply bg-task-urgent/10 text-task-urgent border-task-urgent/20;
+    @apply bg-[hsl(var(--task-urgent)_/_0.1)] text-[hsl(var(--task-urgent))] border-[hsl(var(--task-urgent)_/_0.2)];
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

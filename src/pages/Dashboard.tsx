@@ -6,7 +6,6 @@ import { useTaskFiltering } from "@/hooks/useTaskFiltering";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TasksByStatus from "@/components/dashboard/TasksByStatus";
 import TasksByPriority from "@/components/dashboard/TasksByPriority";
-import TaskCalendarView from "@/components/dashboard/TaskCalendarView";
 import TasksTable from "@/components/TasksTable";
 
 const Dashboard: React.FC = () => {
@@ -35,7 +34,6 @@ const Dashboard: React.FC = () => {
           <TabsTrigger value="table">Table View</TabsTrigger>
           <TabsTrigger value="status">By Status</TabsTrigger>
           <TabsTrigger value="priority">By Priority</TabsTrigger>
-          <TabsTrigger value="calendar">Calendar</TabsTrigger>
         </TabsList>
         
         <TabsContent value="table" className="space-y-4">
@@ -48,10 +46,6 @@ const Dashboard: React.FC = () => {
         
         <TabsContent value="priority" className="space-y-4">
           <TasksByPriority tasks={filteredTasks} />
-        </TabsContent>
-        
-        <TabsContent value="calendar" className="space-y-4">
-          <TaskCalendarView tasks={filteredTasks} />
         </TabsContent>
       </Tabs>
     </div>
