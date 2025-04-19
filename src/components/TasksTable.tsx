@@ -50,7 +50,7 @@ const TasksTable: React.FC<TasksTableProps> = ({ tasks, editable = false }) => {
       description: task.description,
       userPriority: task.userPriority,
       dueDate: task.dueDate,
-      status: task.status
+      status: task.status || "todo" // Provide default value in case status is undefined
     });
   };
 
@@ -72,7 +72,7 @@ const TasksTable: React.FC<TasksTableProps> = ({ tasks, editable = false }) => {
     setEditedValues({ ...editedValues, [field]: value });
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string = "todo") => { // Provide default value
     switch (status) {
       case "todo":
         return "text-red-500";
@@ -197,7 +197,7 @@ const TasksTable: React.FC<TasksTableProps> = ({ tasks, editable = false }) => {
               <TableCell>
                 {editingTask === task.id ? (
                   <Select 
-                    value={editedValues.status || task.status} 
+                    value={editedValues.status || task.status || "todo"} 
                     onValueChange={(value) => handleInputChange('status', value)}
                   >
                     <SelectTrigger className="w-[120px]">
@@ -211,8 +211,8 @@ const TasksTable: React.FC<TasksTableProps> = ({ tasks, editable = false }) => {
                   </Select>
                 ) : (
                   <span className={getStatusColor(task.status)}>
-                    {task.status.replace("_", " ").charAt(0).toUpperCase() +
-                      task.status.replace("_", " ").slice(1)}
+                    {(task.status || "todo").replace("_", " ").charAt(0).toUpperCase() +
+                      (task.status || "todo").replace("_", " ").slice(1)}
                   </span>
                 )}
               </TableCell>
